@@ -49,11 +49,17 @@ class Register extends Action {
     /**
      * Save the phone field to the users profile
      *
-     * @param integer $user_id
+     * @param array $meta
+     * @param \WP_User $user 
+     * @param boolean $update
      * @return void
      */
-    public function register_user_action( $user_id ) {
-        add_user_meta( $user_id, 'phone', $_REQUEST['phone'] ?? '' );
+    public function insert_user_meta_filter( $meta, $user, $update ) {
+        if ( ! $update ) {
+            $meta['phone'] = $_REQUEST['user_phone'] ?? '';
+        }
+
+        return $meta;
     }
 
 }
