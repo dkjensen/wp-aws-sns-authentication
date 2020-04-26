@@ -23,10 +23,21 @@
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-$plugin_data = get_plugin_data( __FILE__ );
+/**
+ * Return version of this plugin
+ *
+ * @return void
+ */
+function aws_sns_authentication_version() {
+    if ( function_exists( 'get_plugin_data' ) ) {
+        return get_plugin_data( __FILE__ )['Version'];
+    }
+
+    return null;
+}
 
 // Constants
-define( 'AWS_SNS_AUTHENTICATION_VER', $plugin_data['Version'] ?? '1.0.0' );
+define( 'AWS_SNS_AUTHENTICATION_VER', aws_sns_authentication_version() ?? '1.0.0' );
 define( 'AWS_SNS_AUTHENTICATION_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AWS_SNS_AUTHENTICATION_URL', plugin_dir_url( __FILE__ ) );
 

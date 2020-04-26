@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstrac action class file
+ * Abstract action class file
  * 
  * @package AWS SNS Authentication
  */
