@@ -7,6 +7,7 @@
 
 namespace SeattleWebCo\AWSSNSAuthentication;
 
+use SeattleWebCo\AWSSNSAuthentication\Install;
 use SeattleWebCo\AWSSNSAuthentication\Actions\Register;
 
 class AWS_SNS_Authentication {
@@ -25,6 +26,8 @@ class AWS_SNS_Authentication {
         $this->actions = apply_filters( 'aws_sns_authentication_actions', [
             new Register
         ] );
+
+        new Install();
     }
 
 }

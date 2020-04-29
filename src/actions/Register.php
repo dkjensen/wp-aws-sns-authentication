@@ -8,12 +8,23 @@
 namespace SeattleWebCo\AWSSNSAuthentication\Actions;
 
 use SeattleWebCo\AWSSNSAuthentication\Helpers;
-use SeattleWebCo\AWSSNSAuthentication\Actions\Action;
+use SeattleWebCo\AWSSNSAuthentication\Abstracts\HookListener;
+use SeattleWebCo\AWSSNSAuthentication\Components\SmsAuthentication;
 
 use Aws\Sns\SnsClient; 
 use Aws\Exception\AwsException;
 
-class Register extends Action {
+class Register extends HookListener {
+
+    /**
+     * Enqueue static assets
+     *
+     * @return void
+     */
+    public function login_enqueue_scripts_action() {
+        wp_enqueue_style( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/css/aws-sns-authentication.css' );
+        wp_enqueue_script( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/js/aws-sns-authentication.js', [], null, true );
+    }
 
     /**
      * Add a phone number field to registration form
@@ -96,6 +107,9 @@ class Register extends Action {
                 'Message'       => $message,
                 'PhoneNumber'   => $phone,
             ] );
+
+            $sms_authentication = new SmsAuthentication;
+            $sms_authentication->add_sms_authentication( $user_id, $code );
         } catch (AwsException $e) {
             error_log( $e->getMessage() );
         } 
@@ -169,6 +183,8 @@ class Register extends Action {
 
             $loginform->parentNode->replaceChild( $form, $loginform );
             echo $domDocument->saveHTML();
+
+            $sms_authentication = new SmsAuthentication;
 
             if ( false === $domContent ) {			
                 return $content;		

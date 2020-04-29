@@ -44,7 +44,13 @@ define( 'AWS_SNS_AUTHENTICATION_URL', plugin_dir_url( __FILE__ ) );
 // Include Composer packages
 require_once AWS_SNS_AUTHENTICATION_DIR . 'vendor/autoload.php';
 
-register_activation_hook( __FILE__, 'flush_rewrite_rules' );
-register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
+new SeattleWebCo\AWSSNSAuthentication\AWS_SNS_Authentication;
 
-return new SeattleWebCo\AWSSNSAuthentication\AWS_SNS_Authentication;
+register_activation_hook( __FILE__, function() {
+    $install = new \SeattleWebCo\AWSSNSAuthentication\Install;
+    $install->install_tables();
+
+    flush_rewrite_rules();
+} );
+
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );

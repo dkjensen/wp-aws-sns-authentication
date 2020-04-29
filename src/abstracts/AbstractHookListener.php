@@ -1,24 +1,21 @@
 <?php
 /**
- * Abstract action class file
+ * Hook listener abstract class file
  * 
  * @package AWS SNS Authentication
  */
 
-namespace SeattleWebCo\AWSSNSAuthentication\Actions;
+namespace SeattleWebCo\AWSSNSAuthentication\Abstracts;
 
 use ReflectionMethod;
 
-abstract class Action {
-
+abstract class HookListener {
+    
     /**
-     * Add action and filter hooks based on method name
-     *
-     * @return void
+     * Automatically register methods in the WordPress hook system from
+     * method naming conventions
      */
     final public function __construct() {
-        add_action( 'login_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-
         $methods = get_class_methods( $this );
 
         foreach ( $methods as $name ) {
@@ -34,8 +31,4 @@ abstract class Action {
         }
     }
 
-    final public function enqueue_scripts() {
-        wp_enqueue_style( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/css/aws-sns-authentication.css' );
-        wp_enqueue_script( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/js/aws-sns-authentication.js', [], null, true );
-    }
 }
