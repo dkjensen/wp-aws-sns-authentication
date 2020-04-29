@@ -31,4 +31,46 @@ class Helpers {
         return preg_replace( '/[^\+\d]/', '', $phone );
     }
 
+    /**
+     * How long should the authentication code length be?
+     *
+     * @return integer
+     */
+    public static function get_authentication_code_length() {
+        return absint( apply_filters( 'aws_sns_authentication_code_length', 6 ) );
+    }
+
+    /**
+     * Generate a random code from a predefined length
+     *
+     * @param integer $length
+     * @return string
+     */
+    public static function generate_random_authentication_code( int $length = 0 ) {
+        if ( ! $length ) {
+            $length = self::get_authentication_code_length();
+        }
+
+        $code = '';
+        
+        for ( $i = 0; $i < $length; $i++ ) {
+            $code .= mt_rand( 0, 9 );
+        }
+
+        return $code;
+    }
+
+    /**
+     * Get the authentication code SMS message
+     *
+     * @param integer $user_id
+     * @param string $code
+     * @return string
+     */
+    public static function get_authentication_sms_message( $user_id, $code ) {
+        $message = sprintf( __( 'Your account authentication code is: %s', 'aws-sns-authentication' ), $code );
+
+        return apply_filters( 'aws_sns_authentication_sms_message', $message, $user_id, $code );
+    }
+
 }

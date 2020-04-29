@@ -10,3 +10,26 @@
         background-image: url('../img/flags@2x.png');
     }
 }
+
+.login #registerform {
+    overflow: visible;
+}
+
+.aws-sns-auth-field-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    label {
+        width: 100%;
+    }
+
+    .input.aws-sns-auth-field {
+        width: auto;
+        min-width: 0;
+        flex: 1;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

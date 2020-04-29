@@ -73,26 +73,30 @@ class Register extends Action {
      * @return void
      */
     public function user_register_action( $user_id ) {
-        $SnSclient = new SnsClient( [
-            'region' => 'us-east-1',
-            'version' => 'latest',
-            'credentials' => [
-                'key'    => 'AKIA25NF4XTQ6AFL6Z75',
-                'secret' => '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',
-            ],
-        ] );
+        $args = [ 
+            'version'   => constant( 'AWS_SNS_AUTH_VER' ) ?? 'latest',
+            'region'    => constant( 'AWS_SNS_AUTH_REGION' ) ?? null
+        ];
+
+        if ( defined( 'AWS_SNS_AUTH_KEY' ) && defined( 'AWS_SNS_AUTH_SECRET' ) ) {
+            $args['credentials'] = [
+                'key'       =>  constant( 'AWS_SNS_AUTH_KEY' ),
+                'secret'    => constant( 'AWS_SNS_AUTH_SECRET' )
+            ];
+        }
+
+        $SnSclient = new SnsClient( $args );
         
-        $message = 'This message is sent from a Amazon SNS code sample.';
-        $phone = '+14258292246';
+        $code    = Helpers::generate_random_authentication_code();
+        $message = Helpers::get_authentication_sms_message( $user_id, $code );
+        $phone   = get_user_meta( $user_id, 'phone_e164', true );
         
         try {
             $result = $SnSclient->publish( [
                 'Message'       => $message,
                 'PhoneNumber'   => $phone,
             ] );
-            var_dump( $result );
         } catch (AwsException $e) {
-            // output error message if fails
             error_log( $e->getMessage() );
         } 
     }
@@ -123,16 +127,25 @@ class Register extends Action {
             $form->setAttribute( 'method', 'post' );
             $form->setAttribute( 'id', 'loginform' );
 
-            $field = $domDocument->createElement( 'input' );
-            $field->setAttribute( 'name', 'authentication_code' );
-            $field->setAttribute( 'type', 'text' );
-            $field->setAttribute( 'autofocus', 'autofocus' );
-
             $label = $domDocument->createElement( 'label', __( 'Verification code', 'aws-sns-authentication' ) );
             $label->setAttribute( 'for', 'authentication_code' );
 
             $p = $domDocument->createElement( 'p' );
+            $p->setAttribute( 'class', 'aws-sns-auth-field-container' );
             $p->appendChild( $label );
+
+            $length = Helpers::get_authentication_code_length();
+
+            $field = $domDocument->createElement( 'input' );
+            $field->setAttribute( 'name', 'authentication_code' );
+            $field->setAttribute( 'class', 'input aws-sns-auth-field' );
+            $field->setAttribute( 'type', 'text' );
+            $field->setAttribute( 'autofocus', 'autofocus' );
+            $field->setAttribute( 'maxlength', $length );
+            $field->setAttribute( 'inputmode', 'numeric' );
+            $field->setAttribute( 'pattern', '[0-9]*' );
+            $field->setAttribute( 'autocomplete', 'one-time-code' );
+
             $p->appendChild( $field );
 
             $form->appendChild( $p );
