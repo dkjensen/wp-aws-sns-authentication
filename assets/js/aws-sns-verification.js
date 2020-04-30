@@ -1944,10 +1944,10 @@ module.exports = __webpack_require__(/*! ./build/js/intlTelInput */ "./node_modu
 
 /***/ }),
 
-/***/ "./resources/js/aws-sns-authentication.js":
-/*!************************************************!*\
-  !*** ./resources/js/aws-sns-authentication.js ***!
-  \************************************************/
+/***/ "./resources/js/aws-sns-verification.js":
+/*!**********************************************!*\
+  !*** ./resources/js/aws-sns-verification.js ***!
+  \**********************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1975,10 +1975,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/scss/aws-sns-authentication.scss":
-/*!****************************************************!*\
-  !*** ./resources/scss/aws-sns-authentication.scss ***!
-  \****************************************************/
+/***/ "./resources/scss/aws-sns-verification.scss":
+/*!**************************************************!*\
+  !*** ./resources/scss/aws-sns-verification.scss ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1987,14 +1987,14 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 0:
-/*!***************************************************************************************************!*\
-  !*** multi ./resources/js/aws-sns-authentication.js ./resources/scss/aws-sns-authentication.scss ***!
-  \***************************************************************************************************/
+/*!***********************************************************************************************!*\
+  !*** multi ./resources/js/aws-sns-verification.js ./resources/scss/aws-sns-verification.scss ***!
+  \***********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/david/Workspace/sandbox.local/www/wp-content/plugins/wp-aws-sns-authentication/resources/js/aws-sns-authentication.js */"./resources/js/aws-sns-authentication.js");
-module.exports = __webpack_require__(/*! /Users/david/Workspace/sandbox.local/www/wp-content/plugins/wp-aws-sns-authentication/resources/scss/aws-sns-authentication.scss */"./resources/scss/aws-sns-authentication.scss");
+__webpack_require__(/*! C:\Workspace\poweroverpredators.local\www\wp-content\plugins\wp-aws-sns-authentication\resources\js\aws-sns-verification.js */"./resources/js/aws-sns-verification.js");
+module.exports = __webpack_require__(/*! C:\Workspace\poweroverpredators.local\www\wp-content\plugins\wp-aws-sns-authentication\resources\scss\aws-sns-verification.scss */"./resources/scss/aws-sns-verification.scss");
 
 
 /***/ })

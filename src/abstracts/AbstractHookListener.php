@@ -2,10 +2,10 @@
 /**
  * Hook listener abstract class file
  * 
- * @package AWS SNS Authentication
+ * @package AWS SNS Verification
  */
 
-namespace SeattleWebCo\AWSSNSAuthentication\Abstracts;
+namespace SeattleWebCo\AWSSNSVerification\Abstracts;
 
 use ReflectionMethod;
 

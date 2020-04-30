@@ -1,15 +1,15 @@
 <?php
 /**
- * Install class file
+ * Upgrade class file
  * 
- * @package AWS SNS Authentication
+ * @package AWS SNS Verification
  */
 
-namespace SeattleWebCo\AWSSNSAuthentication;
+namespace SeattleWebCo\AWSSNSVerification;
 
-use SeattleWebCo\AWSSNSAuthentication\Abstracts\HookListener;
+use SeattleWebCo\AWSSNSVerification\Abstracts\HookListener;
 
-class Install extends HookListener {
+class Upgrade extends HookListener {
 
     /**
      * Current version of database tables
@@ -24,7 +24,7 @@ class Install extends HookListener {
      * @return void
      */
     public function needs_update() {
-        $current_ver = get_option( 'aws_sns_authentication_db_ver' );
+        $current_ver = get_option( 'aws_sns_verification_db_ver' );
 
         if ( version_compare( $current_ver, $this->db_version, '<' ) ) {
             return true;
@@ -48,17 +48,17 @@ class Install extends HookListener {
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "
-            CREATE TABLE {$wpdb->prefix}user_authentication (
+            CREATE TABLE {$wpdb->prefix}user_verification (
                 id                  BIGINT(11) UNSIGNED NOT NULL auto_increment, 
                 user_id             BIGINT(20) UNSIGNED NOT NULL, 
                 phone_e164          VARCHAR(50) DEFAULT NULL, 
-                authentication_code INT(11) DEFAULT NULL, 
+                verification_code INT(11) DEFAULT NULL, 
                 created_date        DATETIME DEFAULT CURRENT_TIMESTAMP,
                 verified_date       DATETIME DEFAULT NULL,
                 verified            TINYINT(1) NOT NULL DEFAULT 0, 
                 type                VARCHAR(50) NOT NULL
                 PRIMARY KEY (id) 
-                UNIQUE KEY user_authentication (user_id,type)
+                UNIQUE KEY user_verification (user_id,type)
             )
             $charset_collate
         ";
@@ -66,7 +66,7 @@ class Install extends HookListener {
         require_once constant( 'ABSPATH' ) . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
 
-        update_option( 'aws_sns_authentication_db_ver', $this->db_version );
+        update_option( 'aws_sns_verification_db_ver', $this->db_version );
     }
 
     /**
@@ -80,8 +80,8 @@ class Install extends HookListener {
 
             <div class="notice notice-warning">
                 <p>
-                    <?php _e( 'The AWS SNS Authentication database needs to be updated.', 'aws-sns-authentication' ); ?> 
-                    <a href="<?php echo wp_nonce_url( add_query_arg( [ 'aws-sns-auth-install' => 1 ] ), 'aws-sns-auth-install' ); ?>"><?php _e( 'Update Now', 'aws-sns-authentication' ); ?></a>
+                    <?php _e( 'The AWS SNS Verification database needs to be updated.', 'aws-sns-verification' ); ?> 
+                    <a href="<?php echo wp_nonce_url( add_query_arg( [ 'aws-sns-auth-install' => 1 ] ), 'aws-sns-auth-install' ); ?>"><?php _e( 'Update Now', 'aws-sns-verification' ); ?></a>
                 </p>
             </div>
 

@@ -81,8 +81,8 @@ mix.version();
  * @link https://laravel.com/docs/5.6/mix#working-with-scripts
  */
 mix
-    .js(`${devPath}/js/aws-sns-authentication.js`, `${distPath}/js/aws-sns-authentication.js`)
-    .minify(`${distPath}/js/aws-sns-authentication.js`);
+    .js(`${devPath}/js/aws-sns-verification.js`, `${distPath}/js/aws-sns-verification.js`)
+    .minify(`${distPath}/js/aws-sns-verification.js`);
 
 /*
  * Compile CSS. Mix supports Sass, Less, Stylus, and plain CSS, and has functions
@@ -102,7 +102,7 @@ var sassConfig = {
 
 // Compile SASS/CSS.
 mix
-    .sass(`${devPath}/scss/aws-sns-authentication.scss`, `${distPath}/css/aws-sns-authentication.css`, sassConfig).options({
+    .sass(`${devPath}/scss/aws-sns-verification.scss`, `${distPath}/css/aws-sns-verification.css`, sassConfig).options({
     postCss: [
         require('cssnano')({
             preset: ['default', {

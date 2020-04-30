@@ -2,10 +2,10 @@
 /**
  * Helper methods file
  * 
- * @package AWS SNS Authentication
+ * @package AWS SNS Verification
  */
 
-namespace SeattleWebCo\AWSSNSAuthentication;
+namespace SeattleWebCo\AWSSNSVerification;
 
 class Helpers {
 
@@ -18,7 +18,7 @@ class Helpers {
     public static function get_user_phone( $user_id ) {
         $phone = get_user_meta( $user_id, 'phone', true );
 
-        return apply_filters( 'aws_sns_authentication_get_user_phone', $phone, $user_id );
+        return apply_filters( 'aws_sns_verification_get_user_phone', $phone, $user_id );
     }
 
     /**
@@ -32,12 +32,12 @@ class Helpers {
     }
 
     /**
-     * How long should the authentication code length be?
+     * How long should the verification code length be?
      *
      * @return integer
      */
-    public static function get_authentication_code_length() {
-        return absint( apply_filters( 'aws_sns_authentication_code_length', 6 ) );
+    public static function get_verification_code_length() {
+        return absint( apply_filters( 'aws_sns_verification_code_length', 6 ) );
     }
 
     /**
@@ -46,9 +46,9 @@ class Helpers {
      * @param integer $length
      * @return string
      */
-    public static function generate_random_authentication_code( int $length = 0 ) {
+    public static function generate_random_verification_code( int $length = 0 ) {
         if ( ! $length ) {
-            $length = self::get_authentication_code_length();
+            $length = self::get_verification_code_length();
         }
 
         $code = '';
@@ -61,16 +61,16 @@ class Helpers {
     }
 
     /**
-     * Get the authentication code SMS message
+     * Get the verification code SMS message
      *
      * @param integer $user_id
      * @param string $code
      * @return string
      */
-    public static function get_authentication_sms_message( $user_id, $code ) {
-        $message = sprintf( __( 'Your account authentication code is: %s', 'aws-sns-authentication' ), $code );
+    public static function get_verification_sms_message( $user_id, $code ) {
+        $message = sprintf( __( 'Your account verification code is: %s', 'aws-sns-verification' ), $code );
 
-        return apply_filters( 'aws_sns_authentication_sms_message', $message, $user_id, $code );
+        return apply_filters( 'aws_sns_verification_sms_message', $message, $user_id, $code );
     }
 
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name:     AWS SNS Authentication
- * Description:     Send messages via SNS to authenticate users during login or registration
+ * Plugin Name:     AWS SNS Verification
+ * Description:     Send messages via SNS to verify users during login or registration
  * Version:         1.0.0
  * Author:          Seattle Web Co.
  * Author URI:      https://seattlewebco.com
- * Text Domain:     aws-sns-authentication
+ * Text Domain:     aws-sns-verification
  * Domain Path:     /languages/
  * Contributors:    seattlewebco, dkjensen
  * Requires PHP:    7.0.0
@@ -28,7 +28,7 @@ if( ! defined( 'ABSPATH' ) ) exit;
  *
  * @return void
  */
-function aws_sns_authentication_version() {
+function aws_sns_verification_version() {
     if ( function_exists( 'get_plugin_data' ) ) {
         return get_plugin_data( __FILE__ )['Version'];
     }
@@ -37,18 +37,18 @@ function aws_sns_authentication_version() {
 }
 
 // Constants
-define( 'AWS_SNS_AUTHENTICATION_VER', aws_sns_authentication_version() ?? '1.0.0' );
-define( 'AWS_SNS_AUTHENTICATION_DIR', plugin_dir_path( __FILE__ ) );
-define( 'AWS_SNS_AUTHENTICATION_URL', plugin_dir_url( __FILE__ ) );
+define( 'AWS_SNS_VERIFICATION_VER', aws_sns_verification_version() ?? '1.0.0' );
+define( 'AWS_SNS_VERIFICATION_DIR', plugin_dir_path( __FILE__ ) );
+define( 'AWS_SNS_VERIFICATION_URL', plugin_dir_url( __FILE__ ) );
 
 // Include Composer packages
-require_once AWS_SNS_AUTHENTICATION_DIR . 'vendor/autoload.php';
+require_once AWS_SNS_VERIFICATION_DIR . 'vendor/autoload.php';
 
-new SeattleWebCo\AWSSNSAuthentication\AWS_SNS_Authentication;
+new SeattleWebCo\AWSSNSVerification\AWS_SNS_Verification;
 
 register_activation_hook( __FILE__, function() {
-    $install = new \SeattleWebCo\AWSSNSAuthentication\Install;
-    $install->install_tables();
+    $upgrade = new \SeattleWebCo\AWSSNSVerification\Upgrade;
+    $upgrade->install_tables();
 
     flush_rewrite_rules();
 } );

@@ -1,7 +1,7 @@
 {
-  "name": "wp-aws-sns-authentication",
+  "name": "wp-aws-sns-verification",
   "version": "0.0.0-development",
-  "description": "Send messages via SNS to authenticate users during login or registration",
+  "description": "Send messages via SNS to verify users during login or registration",
   "repository": {},
   "author": "Seattle web Co.",
   "license": "GPL-3.0-or-later",
@@ -65,7 +65,7 @@
       [
         "semantic-release-version-bump",
         {
-          "files": "wp-aws-sns-authentication.php"
+          "files": "wp-aws-sns-verification.php"
         }
       ]
     ]

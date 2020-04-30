@@ -2,14 +2,14 @@
 /**
  * Register action class file
  * 
- * @package AWS SNS Authentication
+ * @package AWS SNS Verification
  */
 
-namespace SeattleWebCo\AWSSNSAuthentication\Actions;
+namespace SeattleWebCo\AWSSNSVerification\Actions;
 
-use SeattleWebCo\AWSSNSAuthentication\Helpers;
-use SeattleWebCo\AWSSNSAuthentication\Abstracts\HookListener;
-use SeattleWebCo\AWSSNSAuthentication\Components\SmsAuthentication;
+use SeattleWebCo\AWSSNSVerification\Helpers;
+use SeattleWebCo\AWSSNSVerification\Abstracts\HookListener;
+use SeattleWebCo\AWSSNSVerification\Components\SmsVerification;
 
 use Aws\Sns\SnsClient; 
 use Aws\Exception\AwsException;
@@ -22,8 +22,8 @@ class Register extends HookListener {
      * @return void
      */
     public function login_enqueue_scripts_action() {
-        wp_enqueue_style( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/css/aws-sns-authentication.css' );
-        wp_enqueue_script( 'aws-sns-authentication', AWS_SNS_AUTHENTICATION_URL . 'assets/js/aws-sns-authentication.js', [], null, true );
+        wp_enqueue_style( 'aws-sns-verification', AWS_SNS_VERIFICATION_URL . 'assets/css/aws-sns-verification.css' );
+        wp_enqueue_script( 'aws-sns-verification', AWS_SNS_VERIFICATION_URL . 'assets/js/aws-sns-verification.js', [], null, true );
     }
 
     /**
@@ -35,7 +35,7 @@ class Register extends HookListener {
         ?>
 
         <p>
-            <label for="user_phone"><?php esc_html_e( 'Phone', 'aws-sns-authentication' ); ?></label>
+            <label for="user_phone"><?php esc_html_e( 'Phone', 'aws-sns-verification' ); ?></label>
             <input type="tel" name="user_phone" id="user_phone" class="input input-intl-phone" value="" size="25" />
 		</p>
 
@@ -50,11 +50,11 @@ class Register extends HookListener {
      */
     public function registration_errors_filter( $errors ) {
         if ( empty( $_REQUEST['user_phone'] ) ) {
-            $errors->add( 'empty_phone', __( '<strong>ERROR</strong>: A phone number is required for account authentication.', 'aws-sns-authentication' ) );
+            $errors->add( 'empty_phone', __( '<strong>ERROR</strong>: A phone number is required for account verification.', 'aws-sns-verification' ) );
         }
 
         if ( strlen( Helpers::sanitize_phone_number( $_REQUEST['user_phone'] ) ) < 8 ) {
-            $errors->add( 'invalid_phone', __( '<strong>ERROR</strong>: Please enter a valid phone number.', 'aws-sns-authentication' ) );
+            $errors->add( 'invalid_phone', __( '<strong>ERROR</strong>: Please enter a valid phone number.', 'aws-sns-verification' ) );
         }
 
         return $errors;
@@ -78,7 +78,7 @@ class Register extends HookListener {
     }
 
     /**
-     * Send a account authentication SMS to the user
+     * Send a account verification SMS to the user
      *
      * @param integer $user_id
      * @return void
@@ -86,7 +86,7 @@ class Register extends HookListener {
     public function user_register_action( $user_id ) {
         $args = [ 
             'version'   => constant( 'AWS_SNS_AUTH_VER' ) ?? 'latest',
-            'region'    => constant( 'AWS_SNS_AUTH_REGION' ) ?? null
+            'region'    => constant( 'AWS_SNS_AUTH_REGION' ) ?? 'us-east-1'
         ];
 
         if ( defined( 'AWS_SNS_AUTH_KEY' ) && defined( 'AWS_SNS_AUTH_SECRET' ) ) {
@@ -95,21 +95,21 @@ class Register extends HookListener {
                 'secret'    => constant( 'AWS_SNS_AUTH_SECRET' )
             ];
         }
-
-        $SnSclient = new SnsClient( $args );
         
-        $code    = Helpers::generate_random_authentication_code();
-        $message = Helpers::get_authentication_sms_message( $user_id, $code );
+        $code    = Helpers::generate_random_verification_code();
+        $message = Helpers::get_verification_sms_message( $user_id, $code );
         $phone   = get_user_meta( $user_id, 'phone_e164', true );
         
         try {
+            $SnSclient = new SnsClient( $args );
+
             $result = $SnSclient->publish( [
                 'Message'       => $message,
                 'PhoneNumber'   => $phone,
             ] );
 
-            $sms_authentication = new SmsAuthentication;
-            $sms_authentication->add_sms_authentication( $user_id, $code );
+            $sms_verification = new SmsVerification;
+            $sms_verification->add_sms_verification( $user_id, $code );
         } catch (AwsException $e) {
             error_log( $e->getMessage() );
         } 
@@ -141,17 +141,17 @@ class Register extends HookListener {
             $form->setAttribute( 'method', 'post' );
             $form->setAttribute( 'id', 'loginform' );
 
-            $label = $domDocument->createElement( 'label', __( 'Verification code', 'aws-sns-authentication' ) );
-            $label->setAttribute( 'for', 'authentication_code' );
+            $label = $domDocument->createElement( 'label', __( 'Verification code', 'aws-sns-verification' ) );
+            $label->setAttribute( 'for', 'verification_code' );
 
             $p = $domDocument->createElement( 'p' );
             $p->setAttribute( 'class', 'aws-sns-auth-field-container' );
             $p->appendChild( $label );
 
-            $length = Helpers::get_authentication_code_length();
+            $length = Helpers::get_verification_code_length();
 
             $field = $domDocument->createElement( 'input' );
-            $field->setAttribute( 'name', 'authentication_code' );
+            $field->setAttribute( 'name', 'verification_code' );
             $field->setAttribute( 'class', 'input aws-sns-auth-field' );
             $field->setAttribute( 'type', 'text' );
             $field->setAttribute( 'autofocus', 'autofocus' );
@@ -184,7 +184,7 @@ class Register extends HookListener {
             $loginform->parentNode->replaceChild( $form, $loginform );
             echo $domDocument->saveHTML();
 
-            $sms_authentication = new SmsAuthentication;
+            //$sms_verification = new SmsVerification;
 
             if ( false === $domContent ) {			
                 return $content;		

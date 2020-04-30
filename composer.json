@@ -1,6 +1,6 @@
 {
-    "name": "seattlewebco/wp-aws-sns-authentication",
-    "description": "Send messages via SNS to authenticate users during login or registration",
+    "name": "seattlewebco/wp-aws-sns-verification",
+    "description": "Send messages via SNS to verify users during login or registration",
     "type": "wordpress-plugin",
     "license": "GPL-3.0+",
     "authors": [
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "SeattleWebCo\\AWSSNSAuthentication\\": "src"
+            "SeattleWebCo\\AWSSNSVerification\\": "src"
         }
     },
     "require": {

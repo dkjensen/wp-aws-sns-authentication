@@ -1,3 +1,3 @@
-# WordPress AWS SNS Authentication
+# WordPress AWS SNS Verification
 
-This plugin is used to authenticate users during login or registration
+This plugin is used to verify users during login or registration
